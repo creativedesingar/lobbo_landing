@@ -5,7 +5,7 @@
 
 backend:
   name: github
-  repo: TU-USUARIO/TU-REPO   # ← CAMBIAR: usuario/repositorio de GitHub (ej. lobbo/landing)
+  repo: creativedesingar/lobbo_landing   # ← CAMBIAR: usuario/repositorio de GitHub (ej. lobbo/landing)
   branch: main
 
 # Idioma del panel
