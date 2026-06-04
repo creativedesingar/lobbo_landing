@@ -1,0 +1,1984 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOBBO — Discoteca VIP · Carcarañá, Santa Fe</title>
+<meta name="description" content="LOBBO — Discoteca VIP en Carcarañá, Santa Fe. Sábados cada 15 días.">
+<link rel="icon" href="assets/lobbo-mark.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+{% raw %}
+<style>
+  /* ============================================================
+     LOBBO — Landing
+     Tokens lifted from the design system (B/W + deep red)
+     ============================================================ */
+  :root {
+    --bg:           #000000;
+    --bg-elevated:  #0E0E0E;
+    --bg-raised:    #1a1a1a;
+    --bg-hover:     #1F1F1F;
+    --fg:           #FFFFFF;
+    --fg-muted:     #9A9A9A;
+    --fg-subtle:    #808080;
+    --border-faint: rgba(255,255,255,0.06);
+    --border:       rgba(255,255,255,0.12);
+    --border-strong:rgba(255,255,255,0.25);
+
+    --red-900: #2A0408;
+    --red-800: #4A0810;
+    --red-700: #6B0F1A;
+    --red-600: #8B0F1A;  /* primary accent */
+    --red-500: #A8101F;
+    --red-400: #C8102E;
+
+    --font-display: 'Unbounded', 'Arial Black', system-ui, sans-serif;
+    --font-body:    'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-serif:   'Cormorant Garamond', 'Georgia', serif;
+
+    --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-fast:    160ms;
+    --dur-base:    260ms;
+    --dur-slow:    520ms;
+
+    --glow-red: 0 0 0 1px rgba(200,16,46,0.35), 0 8px 40px -8px rgba(139,15,26,0.55);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* Keyboard focus — visible ring, brand red, only for keyboard users.
+     Mouse/touch users never see it (:focus-visible), so the look is unchanged. */
+  :focus { outline: none; }
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--red-400);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ---- Layout ---- */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  @media (min-width: 900px) {
+    .container { padding: 0 80px; }
+  }
+
+  section { position: relative; }
+
+  /* ============================================================
+     SHARED — labels, buttons, fade-up
+     ============================================================ */
+  .label-red {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--red-400);
+  }
+  .label-red::before {
+    content: "";
+    width: 24px; height: 1px;
+    background: var(--red-400);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(36px, 5.5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 14px 0 0;
+    color: var(--fg);
+  }
+
+  .micro-corner {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 30px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out),
+                border-color var(--dur-fast) var(--ease-out),
+                transform var(--dur-fast) var(--ease-out),
+                color var(--dur-fast) var(--ease-out);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--red-600);
+    color: #fff;
+    box-shadow: var(--glow-red);
+  }
+  .btn-primary:hover { background: var(--red-500); }
+  .btn-primary:active { background: var(--red-700); transform: scale(0.98); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.04); }
+  .btn-secondary:active { transform: scale(0.98); }
+
+  /* Square / minimal variant — hard edges, no glow */
+  .btn-square {
+    border-radius: 0;
+    box-shadow: none;
+    padding: 18px 34px;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+  }
+  .btn-square.btn-primary { box-shadow: none; }
+  .btn-square.btn-primary:hover { background: var(--red-500); box-shadow: none; }
+  .btn-square.btn-secondary { border-color: rgba(255,255,255,0.35); }
+  .btn-square.btn-secondary:hover { border-color: var(--fg); background: transparent; }
+
+  /* Fade-up on scroll — gated behind .js-ready so no-JS still shows content */
+  .js-ready .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 720ms var(--ease-out),
+                transform 720ms var(--ease-out);
+    will-change: opacity, transform;
+  }
+  .js-ready .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal[data-delay="1"] { transition-delay: 80ms; }
+  .reveal[data-delay="2"] { transition-delay: 160ms; }
+  .reveal[data-delay="3"] { transition-delay: 240ms; }
+  .reveal[data-delay="4"] { transition-delay: 320ms; }
+
+  /* Image / frame wipe reveal — clip from bottom, no opacity flicker */
+  .js-ready .reveal-clip {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1000ms var(--ease-out);
+    will-change: clip-path;
+  }
+  .js-ready .reveal-clip.is-visible { clip-path: inset(0 0 0 0); }
+  .reveal-clip[data-delay="1"] { transition-delay: 90ms; }
+  .reveal-clip[data-delay="2"] { transition-delay: 180ms; }
+
+  /* The red hairline in a label draws itself when the label reveals */
+  .js-ready .label-red.reveal::before {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 760ms var(--ease-out) 160ms;
+  }
+  .js-ready .label-red.reveal.is-visible::before { transform: scaleX(1); }
+
+  /* Section titles rise from behind a mask */
+  .title-mask { display: block; overflow: hidden; padding-bottom: 0.08em; }
+  .js-ready .title-mask .title-inner {
+    display: block;
+    transform: translateY(105%);
+    transition: transform 920ms var(--ease-out);
+    will-change: transform;
+  }
+  .js-ready .title-mask.is-visible .title-inner { transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, .reveal-clip { opacity: 1 !important; transform: none !important; clip-path: none !important; transition: none !important; }
+    .title-mask .title-inner { transform: none !important; }
+    .hero-bg-img, .hero-light, .hero-scrollcue .cue-track::after, .pulse-dot, .pulse-dot::before { animation: none !important; }
+    .hero-eyebrow, .hero-subtitle, .hero-ctas, .hero-title .ch, .hero-corner .micro-corner, .hero-scrollcue { opacity: 1 !important; transform: none !important; }
+    .hero-bg { transform: none !important; }
+    .hero-bg-img { opacity: 1 !important; transform: scale(1.04) !important; }
+    .hero-inner { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ============================================================
+     1. HERO
+     ============================================================ */
+  .hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 120px 28px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: #000;
+  }
+  .hero-bg {
+    position: absolute;
+    top: -20%; left: 0; right: 0; height: 140%;
+    z-index: 0;
+    overflow: hidden;
+    will-change: transform;
+  }
+  .hero-bg-img {
+    position: absolute; inset: 0;
+    background-image: url('assets/photos/inicio.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    filter: grayscale(25%) brightness(0.5);
+    transform: scale(1.04);
+    opacity: 0;
+    animation:
+      heroBgIn 1600ms var(--ease-out) forwards,
+      heroKenburns 26s ease-in-out 1600ms infinite alternate;
+  }
+  @keyframes heroBgIn {
+    from { opacity: 0; transform: scale(1.12); }
+    to   { opacity: 1; transform: scale(1.04); }
+  }
+  @keyframes heroKenburns {
+    from { transform: scale(1.04) translate3d(0, 0, 0); }
+    to   { transform: scale(1.14) translate3d(-1.5%, -2%, 0); }
+  }
+
+  /* drifting red light that lives over the photo */
+  .hero-light {
+    position: absolute;
+    z-index: 1;
+    width: 70vw; height: 70vw;
+    max-width: 900px; max-height: 900px;
+    top: 50%; left: 50%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,15,26,0.30), transparent 62%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    animation: heroLight 18s ease-in-out infinite alternate;
+    filter: blur(10px);
+  }
+  @keyframes heroLight {
+    0%   { transform: translate(-62%, -56%) scale(1); opacity: 0.9; }
+    50%  { opacity: 0.55; }
+    100% { transform: translate(-40%, -44%) scale(1.18); opacity: 0.85; }
+  }
+
+  /* sutil grilla + radial rojo muy tenue */
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 90%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 45%, rgba(139,15,26,0.12), transparent 65%),
+      linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 35%, transparent 60%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-mark {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(70%, 720px);
+    height: auto;
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 1100px;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 32px;
+    opacity: 0.85;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(72px, 15vw, 220px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--fg);
+  }
+  .hero-title .ch {
+    display: inline-block;
+    transition: opacity 760ms var(--ease-out), transform 980ms var(--ease-out);
+  }
+  .js-ready .hero-title .ch {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+  .hero-title .ch.dot { color: var(--red-500); }
+
+  /* Load sequence — elements lift in once .hero-in is set */
+  .js-ready .hero-eyebrow,
+  .js-ready .hero-subtitle,
+  .js-ready .hero-ctas,
+  .js-ready .hero-corner .micro-corner {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 720ms var(--ease-out), transform 720ms var(--ease-out);
+  }
+  .hero-in .hero-eyebrow { transition-delay: 120ms; opacity: 0.85; transform: none; }
+  .hero-in .hero-title .ch { opacity: 1; transform: none; }
+  .hero-title .ch:nth-child(1) { transition-delay: 240ms; }
+  .hero-title .ch:nth-child(2) { transition-delay: 320ms; }
+  .hero-title .ch:nth-child(3) { transition-delay: 400ms; }
+  .hero-title .ch:nth-child(4) { transition-delay: 480ms; }
+  .hero-title .ch:nth-child(5) { transition-delay: 560ms; }
+  .hero-title .ch:nth-child(6) { transition-delay: 700ms; }
+  .hero-in .hero-subtitle { transition-delay: 760ms; opacity: 1; transform: none; }
+  .hero-in .hero-ctas { transition-delay: 900ms; opacity: 1; transform: none; }
+  .hero-in .hero-corner .micro-corner { transition-delay: 1100ms; opacity: 1; transform: none; }
+  .hero-subtitle {
+    margin-top: 28px;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(13px, 1.6vw, 16px);
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .hero-subtitle .sep { color: var(--red-400); margin: 0 10px; }
+
+  /* scroll cue */
+  .hero-scrollcue {
+    position: absolute;
+    bottom: 26px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    transition: opacity 720ms var(--ease-out) 1300ms;
+  }
+  .js-ready .hero-scrollcue { opacity: 0; }
+  .hero-in .hero-scrollcue { opacity: 0.75; }
+  .hero-scrollcue .cue-label {
+    font-family: var(--font-display);
+    font-size: 9px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .hero-scrollcue .cue-track {
+    position: relative;
+    width: 1px; height: 46px;
+    background: rgba(255,255,255,0.18);
+    overflow: hidden;
+  }
+  .hero-scrollcue .cue-track::after {
+    content: "";
+    position: absolute;
+    top: -50%; left: 0;
+    width: 1px; height: 50%;
+    background: var(--red-400);
+    animation: cueDrop 2.2s var(--ease-out) infinite;
+  }
+  @keyframes cueDrop {
+    0%   { transform: translateY(-100%); }
+    60%  { transform: translateY(200%); }
+    100% { transform: translateY(200%); }
+  }
+  @media (max-width: 640px) { .hero-scrollcue { display: none; } }
+
+  .hero-ctas {
+    margin-top: 52px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-corner {
+    position: absolute;
+    bottom: 28px;
+    left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 28px;
+    z-index: 2;
+  }
+  @media (min-width: 900px) {
+    .hero-corner { padding: 0 80px; bottom: 36px; }
+  }
+
+  /* ============================================================
+     2. AGENDA
+     ============================================================ */
+  .section {
+    padding: 110px 0;
+    border-top: 1px solid var(--border-faint);
+  }
+  @media (max-width: 640px) {
+    .section { padding: 80px 0; }
+  }
+
+  .section-head {
+    margin-bottom: 64px;
+  }
+
+  .agenda-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .agenda-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 180px) 1fr auto;
+    gap: 32px;
+    align-items: center;
+    padding: 36px 0;
+    border-top: 1px solid var(--border-faint);
+    transition: background var(--dur-base) var(--ease-out);
+  }
+  .agenda-row:last-child { border-bottom: 1px solid var(--border-faint); }
+  .agenda-row:hover { background: rgba(255,255,255,0.02); }
+
+  .agenda-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .agenda-day {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .agenda-day .num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(56px, 7.5vw, 104px);
+    letter-spacing: -0.03em;
+    color: var(--fg);
+  }
+  .agenda-day .month {
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-top: 6px;
+  }
+  .agenda-body .session {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+  .agenda-body .session .hash { color: var(--red-400); }
+  .agenda-body .dj {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2.8vw, 34px);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-top: 8px;
+    line-height: 1.05;
+  }
+  .agenda-body .dj .pending {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--fg-muted);
+    font-size: 1em;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    white-space: nowrap;
+  }
+  .badge.confirmed { color: var(--fg); border-color: rgba(255,255,255,0.22); }
+  .badge.holiday {
+    color: var(--red-400);
+    border-color: rgba(200,16,46,0.4);
+    background: rgba(139,15,26,0.08);
+  }
+
+  .agenda-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border-strong);
+    border-radius: 0;
+    transition: all var(--dur-fast) var(--ease-out);
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .agenda-btn:hover {
+    border-color: var(--fg);
+    background: rgba(255,255,255,0.04);
+  }
+  .agenda-btn:active { transform: scale(0.98); }
+  .agenda-btn.is-primary {
+    background: var(--red-600);
+    border-color: var(--red-600);
+    color: #fff;
+  }
+  .agenda-btn.is-primary:hover {
+    background: var(--red-500);
+    border-color: var(--red-500);
+  }
+  .agenda-btn .arrow { transition: transform var(--dur-fast) var(--ease-out); }
+  .agenda-btn:hover .arrow { transform: translateX(3px); }
+  .agenda-btn.is-soon {
+    color: var(--fg-subtle);
+    border-color: var(--border);
+  }
+  .agenda-btn.is-soon:hover {
+    color: var(--fg);
+    border-color: var(--border-strong);
+    background: transparent;
+  }
+
+  /* ---- QR soon modal ---- */
+  .qr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0,0,0,0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+  .qr-modal.is-open { display: flex; opacity: 1; }
+  .qr-modal-box {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.9);
+    padding: 56px 44px 48px;
+    text-align: center;
+    transform: translateY(12px);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .qr-modal.is-open .qr-modal-box { transform: none; }
+  .qr-modal-mark {
+    width: 48px;
+    height: auto;
+    margin: 0 auto 24px;
+    opacity: 0.6;
+    display: block;
+  }
+  .qr-modal-label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red-400);
+    margin-bottom: 14px;
+  }
+  .qr-modal-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin: 0;
+  }
+  .qr-modal-text {
+    margin: 18px 0 0;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.6;
+  }
+  .qr-modal-close {
+    margin-top: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border-strong);
+    border-radius: 0;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  }
+  .qr-modal-close:hover { border-color: var(--fg); background: rgba(255,255,255,0.04); }
+  .qr-modal-x {
+    position: absolute;
+    top: 16px; right: 18px;
+    width: 32px; height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: var(--fg-subtle);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .qr-modal-x:hover { color: var(--fg); }
+
+  @media (max-width: 760px) {
+    .agenda-row {
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "day body"
+        "actions actions";
+      gap: 18px 22px;
+      padding: 28px 0;
+    }
+    .agenda-day { grid-area: day; }
+    .agenda-body { grid-area: body; align-self: center; }
+    .agenda-actions { grid-area: actions; flex-direction: column; align-items: stretch; gap: 8px; }
+    .agenda-btn { justify-content: center; min-height: 44px; }
+    .agenda-day .num { font-size: 56px; }
+    .agenda-body .dj { font-size: 22px; }
+  }
+
+  /* ============================================================
+     3. RESTAURANTE
+     ============================================================ */
+  .restaurant {
+    background: var(--bg-raised);
+    border-top: 1px solid var(--border-faint);
+  }
+  .restaurant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .restaurant-image {
+    aspect-ratio: 3 / 4;
+    background: #0a0a0a;
+    border: 1px solid var(--border-faint);
+    position: relative;
+    overflow: hidden;
+  }
+  .restaurant-image .photo {
+    position: absolute; inset: 0;
+    background-image: url('assets/photos/cena2.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(60%) brightness(0.7);
+    transition: transform 520ms var(--ease-out), filter 520ms var(--ease-out);
+  }
+  .restaurant-image:hover .photo {
+    transform: scale(1.03);
+    filter: grayscale(70%) brightness(0.6);
+  }
+  /* grain overlay */
+  .restaurant-image::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .restaurant-headline {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(40px, 5vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin: 20px 0 0;
+  }
+  .restaurant-headline .italic {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    text-transform: lowercase;
+    letter-spacing: 0;
+    color: var(--fg-muted);
+  }
+  .restaurant-desc {
+    margin: 36px 0 0;
+    max-width: 460px;
+    color: var(--fg-muted);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .restaurant-cta { margin-top: 40px; }
+
+  @media (max-width: 900px) {
+    .restaurant-grid { gap: 48px; }
+  }
+  @media (max-width: 640px) {
+    .restaurant-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .restaurant-image { aspect-ratio: 4 / 3; max-height: 380px; }
+  }
+
+  /* ============================================================
+     4. FOTOS
+     ============================================================ */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .gallery-tile {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    background: #0a0a0a;
+    border: 1px solid var(--border-faint);
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color var(--dur-base) var(--ease-out);
+  }
+  .gallery-tile.wide { grid-column: span 2; aspect-ratio: 2 / 1; }
+  /* grain overlay */
+  .gallery-tile::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .gallery-tile .photo {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center top;
+    filter: grayscale(80%) brightness(0.6);
+    transition: transform 520ms var(--ease-out), filter 520ms var(--ease-out);
+    z-index: 0;
+  }
+  .gallery-tile:hover .photo {
+    transform: scale(1.03);
+    filter: grayscale(90%) brightness(0.45);
+  }
+  .gallery-tile .tile-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 48px 20px 18px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .gallery-tile .tile-date {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red-400);
+  }
+  .gallery-tile .tile-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(14px, 1.6vw, 18px);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--fg);
+    line-height: 1.1;
+  }
+  .gallery-tile .overlay {
+    position: absolute; inset: 0;
+    background: rgba(139,15,26,0.15);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 16px 18px;
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-out);
+    z-index: 4;
+  }
+  .gallery-tile .overlay span {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--fg);
+    transform: translateY(-6px);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .gallery-tile:hover { border-color: rgba(255,255,255,0.22); }
+  .gallery-tile:hover .overlay { opacity: 1; }
+  .gallery-tile:hover .overlay span { transform: none; }
+
+  .gallery-cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 56px;
+  }
+  .gallery-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 4px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--fg);
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .gallery-link:hover { border-color: var(--red-400); color: var(--red-400); }
+  .gallery-link .arrow { transition: transform var(--dur-base) var(--ease-out); }
+  .gallery-link:hover .arrow { transform: translateX(6px); }
+
+  @media (max-width: 900px) {
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+    .gallery-tile.wide { grid-column: span 2; }
+  }
+  @media (max-width: 640px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .gallery-tile.wide { grid-column: span 2; aspect-ratio: 16 / 10; }
+  }
+
+  /* ============================================================
+     5. SESSIONS (YouTube)
+     ============================================================ */
+  .sessions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .sessions-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .video-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .video-frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border-faint);
+    overflow: hidden;
+    background: #0a0a0a;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color var(--dur-base) var(--ease-out);
+  }
+  .video-frame:hover { border-color: var(--border); }
+  .video-thumb {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(85%) brightness(0.62) contrast(1.05);
+    transition: transform 520ms var(--ease-out), filter 520ms var(--ease-out);
+  }
+  .video-frame:hover .video-thumb {
+    transform: scale(1.03);
+    filter: grayscale(75%) brightness(0.5);
+  }
+  /* grain + protection gradient */
+  .video-frame::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    mix-blend-mode: overlay;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .video-frame::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 40%, rgba(0,0,0,0.45));
+    z-index: 1;
+    pointer-events: none;
+  }
+  .video-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.55);
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--dur-base) var(--ease-out),
+                background var(--dur-base) var(--ease-out),
+                transform var(--dur-base) var(--ease-out);
+  }
+  .video-play::after {
+    content: "";
+    width: 0; height: 0;
+    margin-left: 4px;
+    border-style: solid;
+    border-width: 9px 0 9px 15px;
+    border-color: transparent transparent transparent #fff;
+    transition: border-left-color var(--dur-base) var(--ease-out);
+  }
+  .video-frame:hover .video-play {
+    border-color: var(--red-500);
+    background: var(--red-600);
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+  .video-frame:active .video-play { transform: translate(-50%, -50%) scale(0.97); }
+  .video-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-left: 2px;
+  }
+  .video-session {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--red-400);
+  }
+  .video-dj {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(15px, 1.6vw, 20px);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--fg);
+    line-height: 1.1;
+  }
+  .sessions-cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 64px;
+  }
+
+  /* ---- Video lightbox ---- */
+  .video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 5vw;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+  .video-modal.is-open { display: flex; opacity: 1; }
+  .video-modal-box {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border);
+    background: #000;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.9);
+    transform: translateY(12px) scale(0.99);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .video-modal.is-open .video-modal-box { transform: none; }
+  .video-modal-box iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video-modal-close {
+    position: absolute;
+    top: -2px; right: 0;
+    transform: translateY(-130%);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 0;
+    color: var(--fg-muted);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .video-modal-close:hover { color: var(--fg); }
+  @media (max-width: 640px) {
+    .video-modal { padding: 20px; }
+    .video-modal-close { font-size: 10px; }
+  }
+
+  /* ============================================================
+     6. EVENTOS ESPECIALES
+     ============================================================ */
+  .events-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .event-card {
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-faint);
+    padding: 72px 56px 56px;
+    min-height: 360px;
+    overflow: hidden;
+    transition: border-color var(--dur-base) var(--ease-out),
+                transform var(--dur-base) var(--ease-out);
+  }
+  .event-card::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 3px;
+    background: var(--red-600);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+  .event-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+  .event-card:hover::before { transform: scaleY(1); transform-origin: top; }
+
+  .event-bignum {
+    position: absolute;
+    right: -8px;
+    bottom: -28px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(180px, 22vw, 300px);
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: rgba(255,255,255,0.04);
+    pointer-events: none;
+    user-select: none;
+  }
+  .event-card .label-red { position: relative; }
+  .event-title {
+    position: relative;
+    margin: 18px 0 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  .event-desc {
+    position: relative;
+    margin: 24px 0 0;
+    color: var(--fg-muted);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 340px;
+  }
+  .event-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 36px;
+    padding-bottom: 6px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--fg);
+    border-bottom: 1px solid var(--red-600);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .event-link:hover { color: var(--red-400); }
+  .event-link .arrow { transition: transform var(--dur-base) var(--ease-out); }
+  .event-link:hover .arrow { transform: translateX(4px); }
+
+  @media (max-width: 760px) {
+    .events-grid { grid-template-columns: 1fr; }
+    .event-card { padding: 56px 32px 44px; min-height: 280px; }
+  }
+
+  /* ============================================================
+     6. UBICACIÓN
+     ============================================================ */
+  .location {
+    background: var(--bg-raised);
+    border-top: 1px solid var(--border-faint);
+  }
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .map-frame {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: #0a0a0a;
+    border: 1px solid var(--border-faint);
+    overflow: hidden;
+  }
+  .map-frame::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .map-frame::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(110deg, rgba(255,255,255,0.04), transparent 40%),
+      radial-gradient(circle at 38% 58%, rgba(255,255,255,0.06), transparent 50%);
+  }
+  .map-frame .road {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+  }
+  .map-frame .road.r1 { top: 38%; transform: rotate(-3deg); }
+  .map-frame .road.r2 { top: 62%; transform: rotate(2deg); }
+  .map-frame .road.v1 { width: 1px; height: 100%; top: 0; left: 32%; }
+  .map-frame .road.v2 { width: 1px; height: 100%; top: 0; left: 68%; transform: rotate(4deg); transform-origin: top; }
+  .map-frame .label-tl {
+    position: absolute;
+    top: 18px; left: 20px;
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    color: var(--fg-subtle);
+    z-index: 3;
+  }
+  .map-frame .label-br {
+    position: absolute;
+    bottom: 18px; right: 20px;
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    color: var(--fg-subtle);
+    z-index: 3;
+  }
+  .pulse-dot {
+    position: absolute;
+    top: 52%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--red-400);
+    z-index: 4;
+    box-shadow: 0 0 0 4px rgba(200,16,46,0.18);
+  }
+  .pulse-dot::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--red-400);
+    animation: pulse 2.4s var(--ease-out) infinite;
+  }
+  @keyframes pulse {
+    0%   { transform: scale(0.6); opacity: 0.9; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  .info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .info-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-faint);
+  }
+  .info-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .info-row .key {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+  .info-row .val {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(18px, 2vw, 24px);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--fg);
+    line-height: 1.2;
+  }
+  .info-row .val a:hover { color: var(--red-400); }
+  .info-row .val .sub {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--fg-muted);
+    margin-top: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .location-grid { gap: 48px; }
+  }
+  @media (max-width: 640px) {
+    .location-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  /* ============================================================
+     7. FOOTER
+     ============================================================ */
+  .site-footer {
+    background: #000;
+    padding: 110px 0 36px;
+    border-top: 1px solid var(--border-faint);
+  }
+  .footer-top { text-align: center; }
+  .footer-mark-img {
+    width: 54px;
+    height: auto;
+    margin: 0 auto 30px;
+    opacity: 0.9;
+    display: block;
+  }
+  .footer-mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(80px, 16vw, 200px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--fg);
+    text-align: center;
+    margin: 0;
+  }
+  .footer-tag {
+    text-align: center;
+    margin-top: 18px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+
+  /* quick nav row */
+  .footer-nav {
+    margin: 52px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 30px;
+  }
+  .footer-nav a {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .footer-nav a:hover { color: var(--fg); }
+
+  .footer-sponsors {
+    margin: 56px auto 0;
+    padding: 36px 0;
+    border-top: 1px solid var(--border-faint);
+    border-bottom: 1px solid var(--border-faint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+  }
+  .footer-sponsors .s-label {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+  .footer-sponsors img {
+    height: 22px;
+    width: auto;
+    opacity: 0.7;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+  .footer-sponsors img:hover { opacity: 1; }
+  .footer-sponsors .skyy { height: 40px; }
+
+  .footer-mid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 48px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-ig {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--fg);
+    padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .footer-ig:hover { border-color: var(--red-400); color: var(--red-400); }
+
+  .footer-bottom {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-faint);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+
+  @media (max-width: 640px) {
+    .footer-bottom { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+    .footer-sponsors { flex-wrap: wrap; gap: 28px 36px; }
+    .footer-nav { gap: 12px 22px; }
+  }
+
+</style>
+{% endraw %}
+</head>
+<body>
+
+  <!-- ============================================================
+       1. HERO
+       ============================================================ -->
+  <section class="hero" data-screen-label="hero" id="top">
+    <div class="hero-bg" aria-hidden="true"><div class="hero-bg-img"></div></div>
+    <div class="hero-light" aria-hidden="true"></div>
+    <img class="hero-mark" src="assets/lobbo-mark.png" alt="" aria-hidden="true">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">— VIP —</div>
+      <h1 class="hero-title" aria-label="LOBBO"><span class="ch">L</span><span class="ch">O</span><span class="ch">B</span><span class="ch">B</span><span class="ch">O</span><span class="ch dot">.</span></h1>
+      <p class="hero-subtitle">
+        Carcarañá, Santa Fe
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary btn-square" href="#agenda">Comprar entrada</a>
+        <a class="btn btn-secondary btn-square" href="#fotos">Ver fotos</a>
+      </div>
+    </div>
+    <div class="hero-corner">
+      <span class="micro-corner">— DESDE 2019 —</span>
+      <span class="micro-corner">— Carcarañá · SF —</span>
+    </div>
+    <div class="hero-scrollcue" aria-hidden="true">
+      <span class="cue-track"></span>
+      <span class="cue-label">Scroll</span>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       2. AGENDA
+       ============================================================ -->
+  <section class="section" id="agenda" data-screen-label="agenda">
+    <div class="container">
+      <div class="section-head">
+        <span class="label-red reveal">Agenda</span>
+        <h2 class="section-title title-mask" data-delay="1"><span class="title-inner">Próximas noches.</span></h2>
+      </div>
+
+      <div class="agenda-list">
+{% for f in collections.fechasProximas %}
+{%- set parts = f.data.session.split('#') -%}
+        <div class="agenda-row reveal">
+          <div class="agenda-day">
+            <span class="num">{{ f.data.fecha | dia }}</span>
+            <span class="month">{{ f.data.fecha | mesAnio }}</span>
+          </div>
+          <div class="agenda-body">
+            <div class="session">{{ parts[0] }}{% if parts[1] %}<span class="hash">#{{ parts[1] }}</span>{% endif %}</div>
+            <div class="dj">{{ f.data.dj }}</div>
+          </div>
+          <div class="agenda-actions">
+            <a class="agenda-btn" href="https://wa.me/{{ site.whatsapp }}?text={{ ('Hola Lobbo, quiero reservar cena para ' + f.data.session) | urlenc }}" target="_blank" rel="noopener noreferrer">
+              Reservar cena
+            </a>
+            {% if f.data.qr_link %}
+            <a class="agenda-btn is-primary" href="{{ f.data.qr_link }}" target="_blank" rel="noopener noreferrer">
+              Comprar QR <span class="arrow">→</span>
+            </a>
+            {% else %}
+            <button class="agenda-btn is-primary" type="button" data-qr-soon>
+              Comprar QR <span class="arrow">→</span>
+            </button>
+            {% endif %}
+          </div>
+        </div>
+{% endfor %}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       3. RESTAURANTE
+       ============================================================ -->
+  <section class="section restaurant" id="restaurante" data-screen-label="restaurante">
+    <div class="container">
+      <div class="restaurant-grid">
+
+        <div class="restaurant-image reveal-clip">
+          <div class="photo"></div>
+        </div>
+
+        <div class="restaurant-content">
+          <span class="label-red reveal">Restaurante</span>
+          <h2 class="restaurant-headline reveal" data-delay="1">
+            Sentate a cenar,<br>
+            <span class="italic">levantate</span> a bailar.
+          </h2>
+          <p class="restaurant-desc reveal" data-delay="2">
+            La noche en Lobbo empieza en la mesa. Cena desde las 21hs con menú y carta de tragos. Sin salir del lugar, la pista te espera.
+          </p>
+          <div class="restaurant-cta reveal" data-delay="3">
+            <a class="btn btn-primary btn-square" href="https://wa.me/5493413444387?text=Hola%20Lobbo%2C%20quiero%20reservar%20una%20mesa" target="_blank" rel="noopener noreferrer">
+              Reservar mesa →
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       4. FOTOS
+       ============================================================ -->
+  <section class="section" id="fotos" data-screen-label="fotos">
+    <div class="container">
+      <div class="section-head">
+        <span class="label-red reveal">Galería</span>
+        <h2 class="section-title title-mask" data-delay="1"><span class="title-inner">Las noches de Lobbo.</span></h2>
+      </div>
+
+      <div class="gallery">
+{% for a in collections.albumesRecientes %}
+        <a class="gallery-tile reveal-clip{% if loop.first %} wide{% endif %}"{% if not loop.first %} data-delay="{% if loop.index0 % 2 == 0 %}2{% else %}1{% endif %}"{% endif %} href="{{ a.data.drive_link }}" target="_blank" rel="noopener noreferrer">
+          <div class="photo" style="background-image: url('{{ a.data.tapa }}'){% if loop.first %}; background-position: center 22%{% endif %}"></div>
+          <div class="tile-info">
+            <span class="tile-date">{{ a.data.fecha | fechaCorta }}</span>
+            <span class="tile-name">{{ a.data.titulo }}</span>
+          </div>
+          <div class="overlay"><span>Ver álbum ↗</span></div>
+        </a>
+{% endfor %}
+      </div>
+
+      <div class="gallery-cta-wrap reveal">
+        <a class="gallery-link" href="{{ site.drive_master }}" target="_blank" rel="noopener noreferrer">
+          Ver todas las fotos <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       5. SESSIONS
+       ============================================================ -->
+  <section class="section" id="sessions" data-screen-label="sessions">
+    <div class="container">
+      <div class="section-head">
+        <span class="label-red reveal">YOUTUBE</span>
+        <h2 class="section-title title-mask" data-delay="1"><span class="title-inner">LOBBO SESSIONS.</span></h2>
+      </div>
+
+      <div class="sessions-grid">
+{% for s in collections.setsRecientes %}
+{%- set vid = s.data.youtube | ytid -%}
+        <div class="video-card reveal"{% if not loop.first %} data-delay="{{ loop.index0 }}"{% endif %}>
+          <button class="video-frame" type="button" data-video="{{ vid }}" aria-label="Reproducir Lobbo Session {{ s.data.session }} — {{ s.data.dj }}">
+            <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/{{ vid }}/maxresdefault.jpg')"></div>
+            <span class="video-play"></span>
+          </button>
+          <div class="video-meta">
+            <span class="video-session">Lobbo Session <span style="color:var(--red-400)">{{ s.data.session }}</span></span>
+            <span class="video-dj">{{ s.data.dj }}</span>
+          </div>
+        </div>
+{% endfor %}
+      </div>
+
+      <div class="sessions-cta-wrap reveal">
+        <a class="gallery-link" href="{{ site.youtube_channel }}" target="_blank" rel="noopener noreferrer">
+          Ver todos los sets <span class="arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       6. EVENTOS ESPECIALES
+       ============================================================ -->
+  <section class="section" data-screen-label="eventos-especiales">
+    <div class="container">
+      <div class="section-head">
+        <span class="label-red reveal">Privados</span>
+        <h2 class="section-title title-mask" data-delay="1"><span class="title-inner">Eventos especiales.</span></h2>
+      </div>
+
+      <div class="events-grid">
+
+        <div class="event-card reveal">
+          <span class="event-bignum">15</span>
+          <span class="label-red">Cumpleaños</span>
+          <h3 class="event-title">Cumpleaños<br>de 15.</h3>
+          <p class="event-desc">
+            Tu fiesta de 15 en un espacio pensado para vivir una noche inolvidable. Cena, pista, producción y cada detalle preparado para que solo tengas que disfrutar el momento.
+          </p>
+          <a class="event-link" href="https://wa.me/5493413444387?text=Hola%20Lobbo%2C%20quiero%20consultar%20por%20un%20cumplea%C3%B1os%20de%2015" target="_blank" rel="noopener noreferrer">
+            Consultar <span class="arrow">→</span>
+          </a>
+        </div>
+
+        <div class="event-card reveal" data-delay="1">
+          <span class="event-bignum">VIP</span>
+          <span class="label-red">Privados</span>
+          <h3 class="event-title">Eventos<br>privados.</h3>
+          <p class="event-desc">
+            Cumpleaños, eventos empresariales, despedidas y celebraciones privadas en un entorno único. Espacios exclusivos, atención personalizada y la experiencia LOBBO adaptada a cada ocasión.
+          </p>
+          <a class="event-link" href="https://wa.me/5493413444387?text=Hola%20Lobbo%2C%20quiero%20consultar%20por%20un%20evento%20privado" target="_blank" rel="noopener noreferrer">
+            Consultar <span class="arrow">→</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       6. UBICACIÓN
+       ============================================================ -->
+  <section class="section location" id="ubicacion" data-screen-label="ubicacion">
+    <div class="container">
+      <div class="section-head">
+        <span class="label-red reveal">Ubicación</span>
+        <h2 class="section-title title-mask" data-delay="1"><span class="title-inner">Carcarañá, Santa Fe.</span></h2>
+      </div>
+
+      <div class="location-grid">
+
+        <div class="map-frame reveal-clip">
+          <span class="label-tl">— Carcarañá · SF —</span>
+          <span class="road r1"></span>
+          <span class="road r2"></span>
+          <span class="road v1"></span>
+          <span class="road v2"></span>
+          <span class="pulse-dot" aria-hidden="true"></span>
+          <span class="label-br">32° 51′ S</span>
+        </div>
+
+        <div class="info-list reveal" data-delay="1">
+          <div class="info-row">
+            <div class="key">Dirección</div>
+            <div class="val">
+              Belgrano 1552
+              <span class="sub">Carcarañá, Santa Fe — Argentina</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="key">Horario</div>
+            <div class="val">
+              Desde las 21hs
+              <span class="sub">Fechas en la agenda</span>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="key">Edad mínima</div>
+            <div class="val">+18</div>
+          </div>
+          <div class="info-row">
+            <div class="key">Contacto</div>
+            <div class="val">
+              <a href="https://instagram.com/viplobbo" target="_blank" rel="noopener noreferrer">@viplobbo ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       7. FOOTER
+       ============================================================ -->
+  <footer class="site-footer" data-screen-label="footer">
+    <div class="container">
+      <div class="footer-top reveal">
+        <img class="footer-mark-img" src="assets/lobbo-mark.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <h2 class="footer-mark">LOBBO.</h2>
+        <p class="footer-tag">— Carcarañá · Santa Fe —</p>
+      </div>
+
+      <nav class="footer-nav reveal" aria-label="Secciones del sitio">
+        <a href="#agenda">Agenda</a>
+        <a href="#restaurante">Restaurante</a>
+        <a href="#fotos">Galería</a>
+        <a href="#sessions">Sessions</a>
+        <a href="#ubicacion">Ubicación</a>
+      </nav>
+
+      <div class="footer-sponsors reveal">
+        <img src="assets/sponsors/absolut.png" alt="Absolut" loading="lazy" decoding="async">
+        <img class="skyy" src="assets/sponsors/skyy.png" alt="Skyy Vodka" loading="lazy" decoding="async">
+      </div>
+
+      <div class="footer-mid reveal">
+        <a class="footer-ig" href="https://instagram.com/viplobbo" target="_blank" rel="noopener noreferrer">
+          @viplobbo ↗
+        </a>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Lobbo · Todos los derechos reservados</span>
+        <span>Carcarañá · Santa Fe · Argentina</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       Video lightbox
+       ============================================================ -->
+  <div class="video-modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Reproductor de video">
+    <div class="video-modal-box">
+      <button class="video-modal-close" type="button" data-video-close>Cerrar ×</button>
+      <div id="video-modal-slot"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       QR soon modal
+       ============================================================ -->
+  <div class="qr-modal" id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+    <div class="qr-modal-box">
+      <button class="qr-modal-x" type="button" data-qr-close aria-label="Cerrar">×</button>
+      <img class="qr-modal-mark" src="assets/lobbo-mark.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <div class="qr-modal-label">Próxima noche</div>
+      <h3 class="qr-modal-title" id="qr-modal-title">Todavía no están los QR disponibles.</h3>
+      <p class="qr-modal-text">Estamos terminando de cerrar la noche. Muy pronto vas a poder comprar tu entrada acá.</p>
+      <button class="qr-modal-close" type="button" data-qr-close>Entendido</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       Behaviour: fade-up on scroll
+       ============================================================ -->
+  {% raw %}
+  <script>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js-ready');
+      var reveals = Array.prototype.slice.call(
+        document.querySelectorAll('.reveal, .reveal-clip, .title-mask')
+      );
+
+      function reveal(el) { el.classList.add('is-visible'); }
+
+      // Reveal only what is actually in the viewport right now.
+      function revealInView() {
+        var vh = window.innerHeight || document.documentElement.clientHeight;
+        for (var i = 0; i < reveals.length; i++) {
+          var el = reveals[i];
+          if (el.classList.contains('is-visible')) continue;
+          var r = el.getBoundingClientRect();
+          // require the element to be ~8% into the viewport before firing
+          if (r.top < vh * 0.92 && r.bottom > 0) reveal(el);
+        }
+      }
+
+      // 1. First paint: reveal anything already above the fold.
+      revealInView();
+
+      // 2. Primary: IntersectionObserver fires each section as it scrolls in.
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              reveal(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+        reveals.forEach(function (el) {
+          if (!el.classList.contains('is-visible')) io.observe(el);
+        });
+      }
+
+      // 3. Universal fallback: also reveal in-view items on scroll/resize.
+      //    Cheap, and guarantees the effect even if IO is flaky in some host.
+      var ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () { revealInView(); ticking = false; });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+
+      // 4. Hero load sequence — fire on next frame so the entry transitions run.
+      var hero = document.querySelector('.hero');
+      if (hero) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { hero.classList.add('hero-in'); });
+        });
+      }
+    })();
+  </script>
+  {% endraw %}
+
+  <!-- ============================================================
+       Hero parallax — content sinks & fades on scroll-down, returns
+       on scroll-up; background drifts slower for depth. Disabled for
+       reduced-motion. Scroll-linked, so it reverses naturally.
+       ============================================================ -->
+  {% raw %}
+  <script>
+    (function () {
+      var hero = document.querySelector('.hero');
+      if (!hero) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var bg    = hero.querySelector('.hero-bg');
+      var inner = hero.querySelector('.hero-inner');
+      var cue   = hero.querySelector('.hero-scrollcue');
+      var ticking = false;
+
+      function update() {
+        ticking = false;
+        var y  = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var vh = window.innerHeight || 1;
+        if (y > vh) return;                 // only animate while hero is on screen
+        var p = y / vh;                     // 0 at top → 1 one viewport down
+        if (bg)    bg.style.transform = 'translate3d(0,' + (y * 0.15) + 'px,0)';
+        if (inner) {
+          inner.style.transform = 'translateY(' + (y * 0.32) + 'px)';
+          inner.style.opacity   = String(Math.max(0, 1 - p * 1.15));
+        }
+        if (cue)   cue.style.opacity = String(Math.max(0, 0.75 - p * 2.5));
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      window.addEventListener('resize', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    })();
+  </script>
+  {% endraw %}
+
+  {% raw %}
+  <script>
+    (function () {
+      var modal = document.getElementById('video-modal');
+      if (!modal) return;
+      var slot = document.getElementById('video-modal-slot');
+      var triggers = document.querySelectorAll('.video-frame[data-video]');
+      var closers = modal.querySelectorAll('[data-video-close]');
+      var lastFocus = null;
+
+      function open(id) {
+        slot.innerHTML =
+          '<iframe src="https://www.youtube.com/embed/' + id +
+          '?autoplay=1&rel=0" title="Lobbo Session" ' +
+          'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+          'allowfullscreen></iframe>';
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        var first = modal.querySelector('[data-video-close]');
+        if (first) first.focus();
+      }
+      function close() {
+        modal.classList.remove('is-open');
+        slot.innerHTML = '';
+        document.body.style.overflow = '';
+        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      }
+      triggers.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          lastFocus = btn;
+          open(btn.getAttribute('data-video'));
+        });
+      });
+      closers.forEach(function (btn) { btn.addEventListener('click', close); });
+      modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
+      });
+    })();
+  </script>
+  {% endraw %}
+
+  {% raw %}
+  <script>
+    (function () {
+      var modal = document.getElementById('qr-modal');
+      if (!modal) return;
+      var openers = document.querySelectorAll('[data-qr-soon]');
+      var closers = modal.querySelectorAll('[data-qr-close]');
+      var lastFocus = null;
+
+      function open(e) {
+        lastFocus = (e && e.currentTarget) || document.activeElement;
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        // Move focus into the dialog for keyboard / screen-reader users.
+        var first = modal.querySelector('[data-qr-close]');
+        if (first) first.focus();
+      }
+      function close() {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+        // Return focus to the trigger so keyboard context isn't lost.
+        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      }
+      openers.forEach(function (btn) { btn.addEventListener('click', open); });
+      closers.forEach(function (btn) { btn.addEventListener('click', close); });
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) close();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
+      });
+    })();
+  </script>
+  {% endraw %}
+
+</body>
+</html>

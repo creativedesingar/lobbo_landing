@@ -1,0 +1,65 @@
+# ============================================================
+#  LOBBO — Configuración del panel de administración
+#  (Sveltia CMS — compatible con el formato de Decap/Netlify CMS)
+# ============================================================
+
+backend:
+  name: github
+  repo: TU-USUARIO/TU-REPO   # ← CAMBIAR: usuario/repositorio de GitHub (ej. lobbo/landing)
+  branch: main
+
+# Idioma del panel
+locale: es
+
+# Carpeta donde se guardan las imágenes que subís (tapas de álbum, etc.)
+media_folder: "src/assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  # ---------- PRÓXIMAS FECHAS ----------
+  - name: "fechas"
+    label: "Próximas fechas"
+    label_singular: "Fecha"
+    folder: "src/content/fechas"
+    create: true
+    identifier_field: "dj"
+    slug: "{{fields.fecha}}-{{fields.dj}}"
+    summary: "{{fields.fecha}} — {{fields.dj}}"
+    sortable_fields: ["fecha", "dj"]
+    fields:
+      - { label: "Fecha del evento", name: "fecha", widget: "datetime", date_format: "DD/MM/YYYY", time_format: false, format: "YYYY-MM-DD", picker_utc: true }
+      - { label: "Sesión", name: "session", widget: "string", default: "Lobbo Session #", hint: "Ej: Lobbo Session #08" }
+      - { label: "DJ / Artistas", name: "dj", widget: "string" }
+      - { label: "Link Comprar QR", name: "qr_link", widget: "string", required: false, hint: "Si lo dejás vacío, el botón muestra el aviso 'Próximamente'." }
+
+  # ---------- SETS (LOBBO SESSIONS) ----------
+  - name: "sets"
+    label: "Sets (Lobbo Sessions)"
+    label_singular: "Set"
+    folder: "src/content/sets"
+    create: true
+    identifier_field: "dj"
+    slug: "{{fields.session}}-{{fields.dj}}"
+    summary: "{{fields.session}} — {{fields.dj}}"
+    sortable_fields: ["fecha", "session", "dj"]
+    fields:
+      - { label: "Número de sesión", name: "session", widget: "string", default: "#", hint: "Ej: #08" }
+      - { label: "DJ / Título", name: "dj", widget: "string" }
+      - { label: "Link de YouTube", name: "youtube", widget: "string", hint: "Pegá el link del video (youtu.be/...)" }
+      - { label: "Fecha", name: "fecha", widget: "datetime", date_format: "DD/MM/YYYY", time_format: false, format: "YYYY-MM-DD", picker_utc: true, hint: "Define el orden: el más nuevo aparece arriba. Se muestran los últimos 3." }
+
+  # ---------- GALERÍA (ÁLBUMES) ----------
+  - name: "albumes"
+    label: "Galería (álbumes)"
+    label_singular: "Álbum"
+    folder: "src/content/albumes"
+    create: true
+    identifier_field: "titulo"
+    slug: "{{fields.fecha}}-{{fields.titulo}}"
+    summary: "{{fields.fecha}} — {{fields.titulo}}"
+    sortable_fields: ["fecha", "titulo"]
+    fields:
+      - { label: "Título", name: "titulo", widget: "string", hint: "Ej: Iñaki CGD" }
+      - { label: "Link del álbum (Google Drive)", name: "drive_link", widget: "string" }
+      - { label: "Foto de tapa", name: "tapa", widget: "image", choose_url: false }
+      - { label: "Fecha de la noche", name: "fecha", widget: "datetime", date_format: "DD/MM/YYYY", time_format: false, format: "YYYY-MM-DD", picker_utc: true, hint: "Se muestra en la tapa y define el orden (más nueva arriba). Se muestran los últimos 5." }
